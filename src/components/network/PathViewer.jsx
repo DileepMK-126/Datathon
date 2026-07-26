@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Route, Search, HelpCircle, ArrowRight } from 'lucide-react';
 import Card from '../common/Card';
+import { getApi } from '../../services/api';
 
 export default function PathViewer({ onFindPath }) {
   const [source, setSource] = useState('');
@@ -17,11 +18,7 @@ export default function PathViewer({ onFindPath }) {
     setError(null);
     setPathResult(null);
     try {
-      const res = await fetch(`/api/network/path?source=${encodeURIComponent(source)}&target=${encodeURIComponent(target)}`);
-      if (!res.ok) {
-        throw new Error('No connection path found between the selected nodes.');
-      }
-      const data = await res.json();
+      const data = await getApi(`/network/path?source=${encodeURIComponent(source)}&target=${encodeURIComponent(target)}`);
       setPathResult(data);
       if (data.path.length > 0) {
         onFindPath(data.path);

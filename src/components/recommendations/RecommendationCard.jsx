@@ -3,6 +3,7 @@ import { ShieldCheck, HelpCircle, Check, Clock } from 'lucide-react';
 import PriorityBadge from './PriorityBadge';
 import ImpactCard from './ImpactCard';
 import EvidenceAccordion from './EvidenceAccordion';
+import { postApi } from '../../services/api';
 
 export default function RecommendationCard({ rec, userRole }) {
   const [approved, setApproved] = useState(false);
@@ -16,10 +17,8 @@ export default function RecommendationCard({ rec, userRole }) {
 
     setLoading(true);
     try {
-      const res = await fetch(`/api/recommendations/${rec.id}/approve`, { method: 'POST' });
-      if (res.ok) {
-        setApproved(true);
-      }
+      await postApi(`/recommendations/${rec.id}/approve`);
+      setApproved(true);
     } catch (err) {
       alert('Failed to approve recommendation.');
     } finally {

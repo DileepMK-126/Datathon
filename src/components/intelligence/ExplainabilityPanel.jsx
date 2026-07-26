@@ -6,6 +6,7 @@ import DriverBar from './DriverBar';
 import ConfidenceRing from './ConfidenceRing';
 import EvidenceChip from './EvidenceChip';
 import SummaryCard from './SummaryCard';
+import { getApi } from '../../services/api';
 
 export default function ExplainabilityPanel({ zoneId, userRole }) {
   const [explanationData, setExplanationData] = useState(null);
@@ -16,11 +17,7 @@ export default function ExplainabilityPanel({ zoneId, userRole }) {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(`/api/risks/explain/${zoneId}`);
-      if (!res.ok) {
-        throw new Error('Failed to load risk attributions explanation.');
-      }
-      const data = await res.json();
+      const data = await getApi(`/risks/explain/${zoneId}`);
       setExplanationData(data);
     } catch (err) {
       setError(err.message);

@@ -3,6 +3,7 @@ import { SlidersHorizontal, FileJson, Printer, ShieldAlert } from 'lucide-react'
 import Card from '../common/Card';
 import Loader from '../common/Loader';
 import RecommendationCard from './RecommendationCard';
+import { getApi } from '../../services/api';
 
 export default function RecommendationPanel({ zoneId, userRole }) {
   const [recommendationsData, setRecommendationsData] = useState(null);
@@ -17,12 +18,7 @@ export default function RecommendationPanel({ zoneId, userRole }) {
     setLoading(true);
     setError(null);
     try {
-      let url = `/api/recommendations/${zoneId}`;
-      const res = await fetch(url);
-      if (!res.ok) {
-        throw new Error('Failed to load patrol recommendations.');
-      }
-      const data = await res.json();
+      const data = await getApi(`/recommendations/${zoneId}`);
       setRecommendationsData(data);
     } catch (err) {
       setError(err.message);

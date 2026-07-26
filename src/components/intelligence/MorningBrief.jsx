@@ -7,6 +7,7 @@ import BriefSummary from './BriefSummary';
 import IntelligenceHighlights from './IntelligenceHighlights';
 import ExecutiveMetrics from './ExecutiveMetrics';
 import PriorityAlerts from './PriorityAlerts';
+import { getApi } from '../../services/api';
 
 export default function MorningBrief({ userRole, onEnterDashboard }) {
   const [briefData, setBriefData] = useState(null);
@@ -19,11 +20,7 @@ export default function MorningBrief({ userRole, onEnterDashboard }) {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch('/api/intelligence/brief');
-      if (!res.ok) {
-        throw new Error('Failed to load morning brief details.');
-      }
-      const data = await res.json();
+      const data = await getApi('/intelligence/brief');
       setBriefData(data);
       setLastRefreshed(new Date().toLocaleTimeString());
     } catch (err) {

@@ -7,6 +7,7 @@ import RelationshipPanel from './RelationshipPanel';
 import PathViewer from './PathViewer';
 import CommunityLegend from './CommunityLegend';
 import SearchPanel from './SearchPanel';
+import { getApi } from '../../services/api';
 
 export default function NetworkGraph({ caseId, userRole }) {
   const [graphData, setGraphData] = useState(null);
@@ -34,14 +35,10 @@ export default function NetworkGraph({ caseId, userRole }) {
       const searchParam = searchQuery ? `&search_query=${encodeURIComponent(searchQuery)}` : '';
       
       const endpoint = caseId 
-        ? `/api/network/${caseId}?radius=2` 
-        : `/api/network?${typesParams}${searchParam}`;
+        ? `/network/${caseId}?radius=2` 
+        : `/network?${typesParams}${searchParam}`;
         
-      const res = await fetch(endpoint);
-      if (!res.ok) {
-        throw new Error('Failed to load network graph details.');
-      }
-      const data = await res.json();
+      const data = await getApi(endpoint);
       setGraphData(data);
     } catch (err) {
       setError(err.message);

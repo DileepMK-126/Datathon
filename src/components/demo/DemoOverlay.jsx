@@ -4,6 +4,7 @@ import ScenarioSelector from './ScenarioSelector';
 import ProgressBar from './ProgressBar';
 import DemoStepCard from './DemoStepCard';
 import DemoControls from './DemoControls';
+import { getApi } from '../../services/api';
 
 export default function DemoOverlay({ onExitDemo, userRole }) {
   const [demoState, setDemoState] = useState(null);
@@ -12,11 +13,8 @@ export default function DemoOverlay({ onExitDemo, userRole }) {
 
   const fetchStatus = async () => {
     try {
-      const res = await fetch('/api/demo/status');
-      if (res.ok) {
-        const data = await res.json();
-        setDemoState(data);
-      }
+      const data = await getApi('/demo/status');
+      setDemoState(data);
     } catch (err) {
       console.error(err);
     }
@@ -76,11 +74,8 @@ export default function DemoOverlay({ onExitDemo, userRole }) {
   const handleStart = async (scenario = 'burglary', timer = 'manual') => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/demo/start?scenario=${scenario}&timer=${timer}`);
-      if (res.ok) {
-        const data = await res.json();
-        setDemoState(data);
-      }
+      const data = await getApi(`/demo/start?scenario=${scenario}&timer=${timer}`);
+      setDemoState(data);
     } catch (err) {
       console.error(err);
     } finally {
@@ -90,11 +85,8 @@ export default function DemoOverlay({ onExitDemo, userRole }) {
 
   const handleNext = async () => {
     try {
-      const res = await fetch('/api/demo/next');
-      if (res.ok) {
-        const data = await res.json();
-        setDemoState(data);
-      }
+      const data = await getApi('/demo/next');
+      setDemoState(data);
     } catch (err) {
       console.error(err);
     }
@@ -102,11 +94,8 @@ export default function DemoOverlay({ onExitDemo, userRole }) {
 
   const handlePrevious = async () => {
     try {
-      const res = await fetch('/api/demo/previous');
-      if (res.ok) {
-        const data = await res.json();
-        setDemoState(data);
-      }
+      const data = await getApi('/demo/previous');
+      setDemoState(data);
     } catch (err) {
       console.error(err);
     }
@@ -114,11 +103,8 @@ export default function DemoOverlay({ onExitDemo, userRole }) {
 
   const handleReset = async () => {
     try {
-      const res = await fetch('/api/demo/reset');
-      if (res.ok) {
-        const data = await res.json();
-        setDemoState(data);
-      }
+      const data = await getApi('/demo/reset');
+      setDemoState(data);
     } catch (err) {
       console.error(err);
     }

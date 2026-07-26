@@ -3,6 +3,7 @@ import { Sparkles, SlidersHorizontal, GitCompare, X, Check, ShieldAlert } from '
 import Card from '../common/Card';
 import Loader from '../common/Loader';
 import CaseSimilarityCard from './CaseSimilarityCard';
+import { getApi } from '../../services/api';
 
 export default function CaseSimilarityPanel({ 
   caseId,
@@ -28,15 +29,11 @@ export default function CaseSimilarityPanel({
     setLoading(true);
     setError(null);
     try {
-      let url = `/api/cases/${caseId}/similar?limit=${limit}&threshold=${threshold}&sort=${sort}`;
+      let url = `/cases/${caseId}/similar?limit=${limit}&threshold=${threshold}&sort=${sort}`;
       if (category) url += `&category=${encodeURIComponent(category)}`;
       if (district) url += `&district=${encodeURIComponent(district)}`;
       
-      const res = await fetch(url);
-      if (!res.ok) {
-        throw new Error(res.status === 404 ? 'Case similarity not found.' : 'Failed to fetch recommendations.');
-      }
-      const data = await res.json();
+      const data = await getApi(url);
       setSimilarityData(data);
     } catch (err) {
       setError(err.message);

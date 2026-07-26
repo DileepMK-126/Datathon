@@ -9,6 +9,24 @@ export async function getApi(path) {
   return response.json();
 }
 
+export async function postApi(path, body = null) {
+  const token = localStorage.getItem('sentinel_access_token');
+  const headers = {};
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+  if (body) {
+    headers['Content-Type'] = 'application/json';
+  }
+  const response = await fetch(`${API_BASE}${path}`, {
+    method: 'POST',
+    headers,
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  if (!response.ok) throw new Error(`API request failed (${response.status})`);
+  return response.json();
+}
+
 export async function signIn(username, password) {
   const response = await fetch(`${API_BASE}/auth/login`, {
     method: 'POST',
