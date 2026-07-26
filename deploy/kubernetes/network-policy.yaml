@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: sentinel-default-deny
+  namespace: sentinel
+spec:
+  podSelector: {}
+  # Egress must be constrained with the deploying agency's managed-PostGIS,
+  # identity-provider, SIEM, and approved ICJS gateway CIDRs.
+  policyTypes: [Ingress]
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: sentinel-web-to-api
+  namespace: sentinel
+spec:
+  podSelector:
+    matchLabels: { app: sentinel-api }
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels: { app: sentinel-web }
+      ports: [{ protocol: TCP, port: 8000 }]
